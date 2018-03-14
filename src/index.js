@@ -10,14 +10,12 @@ class App extends React.Component {
 
     this.state={searchTerm: ''};
     this.vipSearch = this.vipSearch.bind(this);
-    // this.vipSearch("test");
-    // this.setState = this.setState.bind(this);
-    this.onSearchTermChange = this.onSearchTermChange.bind(this);
 
   }
 
   vipSearch(term) {
      term => this.setState({searchTerm: term});
+     console.log('This is the state of Parent: ' + this.state.searchTerm);
   }
 
   render() {
@@ -27,8 +25,8 @@ class App extends React.Component {
       <div className="App">
         <p>Enter search words:</p>
         <span>
-          <SearchBox onSearchTermChange={ vipSearch }  />
-          <SubmitButton searchWord={this.state.searchTerm}/>
+          <SearchBox onSearchTermChange={ this.vipSearch }  />
+          <SubmitButton searchWord={this.state}/>
         </span>
       </div>
     );
@@ -41,6 +39,7 @@ class SearchBox extends React.Component {
     super(props);
 
     this.state = {term: ''};
+    this.onInputChange = this.onInputChange.bind(this);
   }
 
   render() {
@@ -56,7 +55,7 @@ class SearchBox extends React.Component {
 
   onInputChange(term) {
     this.setState({term});
-    this.props.vipSearch(term);
+    this.props.onSearchTermChange({term});
     console.log(this.state.term);
   }
 }
