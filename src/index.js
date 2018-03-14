@@ -14,7 +14,7 @@ class App extends React.Component {
   }
 
   vipSearch(term) {
-     term => this.setState({searchTerm: term});
+     this.setState({searchTerm: term});
      console.log('This is the state of Parent: ' + this.state.searchTerm);
   }
 
@@ -26,7 +26,7 @@ class App extends React.Component {
         <p>Enter search words:</p>
         <span>
           <SearchBox onSearchTermChange={ this.vipSearch }  />
-          <SubmitButton searchWord={this.state}/>
+          <SubmitButton searchWord={this.state.searchTerm}/>
         </span>
       </div>
     );
@@ -63,16 +63,21 @@ class SearchBox extends React.Component {
 
 
 class SubmitButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
   render() {
     return (
-      // <button className="button" onClick={e => alert('You are searching for: ' + this.props.searchTerm)}>Submit</button>
-      <button className="button" onClick={e => console.log(this.props.searchWord)}>Submit</button>
+      //<button className="button" onClick={e => alert('You are searching for: ' + this.props)}>Submit</button>
+      <button className="button" onClick={e => this.onSubmit(this.props.searchWord)}>Submit</button>
     );
   }
 
-  onClick(term){
-    alert('You are searching for: ' + this.props.term);
-    console.log(term);
+  onSubmit(term){
+    console.log(this.props.searchWord.term);
+    alert('You are searching for: ' + this.props.searchWord.term);
+
   }
 }
 
