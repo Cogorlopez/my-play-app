@@ -8,14 +8,24 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state={searchTerm: ''};
+    this.state= {
+      searchTerm: '',
+      hasSubmitted: false
+    };
+
     this.vipSearch = this.vipSearch.bind(this);
+    this.setSubmitted = this.setSubmitted.bind(this);
 
   }
 
   vipSearch(term) {
      this.setState({searchTerm: term});
      console.log('This is the state of Parent: ' + this.state.searchTerm);
+  }
+
+  setSubmitted(bool) {
+    this.setState({hasSubmitted: bool});
+    console.log('Submitted set to: ' + this.state.hasSubmitted);
   }
 
   render() {
@@ -26,8 +36,9 @@ class App extends React.Component {
         <p>Enter search words:</p>
         <span>
           <SearchBox onSearchTermChange={ this.vipSearch }  />
-          <SubmitButton searchWord={this.state.searchTerm}/>
+          <SubmitButton onSubmitted={ this.setSubmitted }/>
         </span>
+        <DisplayOutput parentState={this.state} />
       </div>
     );
   }
@@ -60,8 +71,6 @@ class SearchBox extends React.Component {
   }
 }
 
-
-
 class SubmitButton extends React.Component {
   constructor(props) {
     super(props);
@@ -70,61 +79,33 @@ class SubmitButton extends React.Component {
   render() {
     return (
       //<button className="button" onClick={e => alert('You are searching for: ' + this.props)}>Submit</button>
-      <button className="button" onClick={e => this.onSubmit(this.props.searchWord)}>Submit</button>
+      <button className="button" onClick={e => this.onSubmit(true)}>Submit</button>
     );
   }
 
-  onSubmit(term){
-    console.log(this.props.searchWord.term);
-    alert('You are searching for: ' + this.props.searchWord.term);
+  onSubmit(bool){
+    // console.log(this.props.searchWord.term);
+    // alert('You are searching for: ' + this.props.searchWord.term);
+    this.props.onSubmitted({bool});
+    console.log({bool})
 
   }
 }
 
-// class SearchOptions extends React.Component {
-//   render() {
-//     return (
-//       <div>
-//       </div>
-//     );
-//   }
-// }
+class DisplayOutput extends React.Component{
+  render() {
+    if (this.props.parentState.hasSubmitted.bool)
+    {
+      return (
+        <p>Results for : {this.props.parentState.searchTerm.term}</p>
+      );
+    } else {
+      return (
+        <p>Results for : </p>
+      );
+    }
 
-// class Vip extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state={value: ''};
-//
-//     this.handleChange = this.handleChange.bind(this);
-//     this.handleSubmit = this.handleSubmit.bind(this);
-//     this.handleClear = this.handleClear.bind(this);
-//   }
-//
-//   handleChange(event) {
-//     this.setState({value: event.target.value});
-//   }
-//
-//   handleSubmit(event) {
-//     alert('You are searching for: ' +this.state.value)
-//     event.preventDefault();
-//   }
-//
-//   handleClear() {
-//     this.setState({value: ''});
-//   }
-//
-//   render () {
-//     return (
-//         <div className="Vip">
-//           <p>Enter search words:</p>
-//           <input type="text" value={this.state.value} onChange={this.handleChange} />
-//           <button className="button" onClick={this.handleSubmit}>Submit</button>
-//           <button className="button" onClick={this.handleClear}>Clear</button>
-//         </div>
-//     );
-//   }
-// }
-
-
+  }
+}
 
 ReactDOM.render(<App />, document.getElementById('root'));
