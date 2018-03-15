@@ -9,12 +9,12 @@ class App extends React.Component {
     super(props);
 
     this.state= {
-      searchTerm: '',
-      hasSubmitted: false
+      searchTerm: ''
+      // hasSubmitted: false
     };
 
     this.vipSearch = this.vipSearch.bind(this);
-    this.setSubmitted = this.setSubmitted.bind(this);
+    // this.setSubmitted = this.setSubmitted.bind(this);
 
   }
 
@@ -23,10 +23,10 @@ class App extends React.Component {
      console.log('This is the state of Parent: ' + this.state.searchTerm);
   }
 
-  setSubmitted(bool) {
-    this.setState({hasSubmitted: bool});
-    console.log('Submitted set to: ' + this.state.hasSubmitted);
-  }
+  // setSubmitted(bool) {
+  //   this.setState({hasSubmitted: bool});
+  //   console.log('Submitted set to: ' + this.state.hasSubmitted);
+  // }
 
   render() {
     // this.vipSearch(term);
@@ -36,9 +36,8 @@ class App extends React.Component {
         <p>Enter search words:</p>
         <span>
           <SearchBox onSearchTermChange={ this.vipSearch }  />
-          <SubmitButton onSubmitted={ this.setSubmitted }/>
+          <SubmitButton searchTerm={ this.state.searchTerm }/>
         </span>
-        <DisplayOutput parentState={this.state} />
       </div>
     );
   }
@@ -74,38 +73,35 @@ class SearchBox extends React.Component {
 class SubmitButton extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {clicked: false};
     this.onSubmit = this.onSubmit.bind(this);
   }
   render() {
     return (
-      //<button className="button" onClick={e => alert('You are searching for: ' + this.props)}>Submit</button>
-      <button className="button" onClick={e => this.onSubmit(true)}>Submit</button>
+      <span>
+      <button className="button" onClick={e => this.onSubmit()}>Submit</button>
+      {this.state.clicked ? <DisplayOutput searchWord={this.props}/> : <p>Results for :</p>}
+      </span>
     );
   }
 
-  onSubmit(bool){
+  onSubmit(){
     // console.log(this.props.searchWord.term);
     // alert('You are searching for: ' + this.props.searchWord.term);
-    this.props.onSubmitted({bool});
-    console.log({bool})
+    this.setState({clicked: true});
+    // this.props.onSubmitted({bool});
+    // console.log({bool})
 
   }
 }
 
 class DisplayOutput extends React.Component{
   render() {
-    if (this.props.parentState.hasSubmitted.bool)
-    {
       return (
-        <p>Results for : {this.props.parentState.searchTerm.term}</p>
-      );
-    } else {
-      return (
-        <p>Results for : </p>
+        <p>Results for : {this.props.searchWord.searchTerm.term} </p>
       );
     }
-
   }
-}
+
 
 ReactDOM.render(<App />, document.getElementById('root'));
